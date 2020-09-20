@@ -1,0 +1,63 @@
+def findAll(pos, maze, cords):
+    x = pos[0]
+    y = pos[1]
+
+    up = []
+    down = []
+    left = []
+    right = []
+    
+    if y > 0 and maze[y - 1][x] != 1:
+        up = [x, cords[y - 1][x][1]]
+    if y < len(maze) - 1 and maze[y + 1][x] != 1:
+        down = [x, cords[y + 1][x][1]]
+    if x > 0 and maze[y][x - 1] != 1:
+        left = [cords[y][x - 1][0], y]
+    if x < len(maze[0]) - 1 and maze[y][x + 1] != 1:
+        right = [cords[y][x + 1][0], y]
+
+    return [up, down, left, right]
+
+width = 7
+height = 5
+
+maze = [[0,1,0,0,0,1,0],
+        [0,1,0,1,0,1,0],
+        [0,1,0,1,0,1,0],
+        [0,1,0,1,0,1,0],
+        [0,0,0,1,0,0,0]]
+cords = [[] for i in range(height)]
+x = 0
+y = 0
+for i in cords:
+    for j in range(width):
+        i.append([x,y])
+        x+=1
+    y+=1
+    x=0
+
+current = [0,0]
+end = [6,0]
+queue = []
+queue.append(current)
+maze[current[1]][current[0]] = 1
+
+gotToEnd = False
+
+while maze[end[1]][end[0]] != 1 and queue:
+    current = queue.pop(0)
+    directions = findAll(current, maze, cords)
+    
+    for i in directions:
+        if i:
+            queue.append(i)
+            maze[i[1]][i[0]] = 1
+
+    for i in maze:
+        print(i)
+    print("\n")
+
+if maze[end[1]][end[0]] == 1:
+    gotToEnd = True
+
+print(gotToEnd)
